@@ -8,7 +8,7 @@ PLAY_BOARD = [str(num) if num > 9 else '0'+str(num) for num in range(100)]
 PLAYERS_MARKS = ['X', 'O']
 X_POSITIONS = list()
 Y_POSITIONS = list()
-RANDOM_BOT_POSSITIONS_LIST = [int(el) for el in PLAY_BOARD]
+EMPTY_POSSITIONS_LIST = [int(el) for el in PLAY_BOARD]
 LOSE_CHECK_LIST = \
     [[i + ln + al for i in range(5)] for ln in range(6) for al in range(0, 91, 10)] + \
     [[i*10 + gn + al for i in range(5)] for gn in range(10) for al in range(0, 51, 10)] + \
@@ -67,12 +67,6 @@ def choose_first():
     return PLAYERS_MARKS[random.choice((0, 1))]
 
 
-def space_check(board, position):
-    """Определение пуста ли ячейка в указанной позиции"""
-
-    return board[position] not in PLAYERS_MARKS
-
-
 def full_board_check(board):
     """Определяет имеется ли на игровой доске оба маркера: X и O"""
 
@@ -85,21 +79,21 @@ def player_choice(board, player_mark, second_player):
     position = -1
 
     if player_mark ==  second_player[1]:
-        position = random.choice(RANDOM_BOT_POSSITIONS_LIST)
+        position = random.choice(EMPTY_POSSITIONS_LIST)
     else:
 
         while position not in [num for num in range(100)]:
             try:
-                position = int(input(f'Игрок "{player_mark}", выберите ячейку с 0 по 100: '))
-            except ValueError as exc:
-                print(f'Неверное значение: {exc}. Пожалуйста, попробуйте снова.')
+                position = int(input(f'\nИгрок "{player_mark}", введите адрес ячейки для хода.\nВвод осуществляется числом в диапазоне от 0 до 99: '))
+                if position not in EMPTY_POSSITIONS_LIST:
+                    position = -1
+                    raise ValueError
+            except ValueError:
+                print(f'\033[31mНеверное значение. Пожалуйста, введите числом адрес пустой ячейки.\033[0m')
 
-    if space_check(board, position):
-        X_POSITIONS.append(position) if player_mark == 'X' else Y_POSITIONS.append(position)
-        RANDOM_BOT_POSSITIONS_LIST.remove(position)
-        return position
-
-    return False
+    X_POSITIONS.append(position) if player_mark == 'X' else Y_POSITIONS.append(position)
+    EMPTY_POSSITIONS_LIST.remove(position)
+    return position
 
 
 def replay():
@@ -130,7 +124,7 @@ def check_game_finish(mark):
     """Проверка того, завершена ли игра"""
 
     if lose_check(mark):
-        print(f'Игрок "{mark}" проиграл!')
+        print(f'\033[31mИгрок "{mark}" проиграл!\033[0m')
         return True
 
     if full_board_check(PLAY_BOARD):
@@ -163,7 +157,7 @@ while True:
             PLAY_BOARD = [str(num) if num > 9 else '0'+str(num) for num in range(100)]
             X_POSITIONS = list()
             Y_POSITIONS = list()
-            RANDOM_BOT_POSSITIONS_LIST = [int(el) for el in PLAY_BOARD]
+            EMPTY_POSSITIONS_LIST = [int(el) for el in PLAY_BOARD]
             PLAYER_MARKS = player_input()
             CURRENT_PLAYER_MARK = choose_first()
     else:
