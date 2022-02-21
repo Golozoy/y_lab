@@ -48,6 +48,67 @@ run code: python3 main.py
 ```
 ___
 
+## task 4
+
+In the control panel (/admin), the user should be able to enter:
+1. list of ingredients for the recipe;
+2. add text and recipe name.
+
+In the public part of the site, the user should be able to view the entered recipes with the output of ingredients with the ability to filter by ingredients and recipe name. Keep in mind that one ingredient can be found in several recipes.
+
+You can use the standard Bootstrap templates to design your website.
+
+It is necessary to develop a database schema, describing the appropriate models for the tables. Thus, the database schema must be converted to third normal form (3NF).
+
+When you first start the project, the database should be filled with data due to migration and adding fixtures.
+
+The project must be packaged in Docker (have a Dockerfile and docker-compose.yml).
+It is necessary to publish the project on GitHub and issue a Readme.md with a description and instructions for launching.
+
+To develop a project use:
+1) PostgreSQL 14 DBMS
+2) Django 3.2.8 framework
+
+The DBMS and the web application must run in separate Docker containers.
+
+
+### How to use
+
+Create an .env file at the root of the repository:
+```
+cp .env.dist .env
+```
+Make adjustments to the environment variables as needed.
+
+At the root of the repository, run the command:
+```
+docker-compose up --build
+```
+
+To stop containers, run the command:
+```
+docker-compose stop
+```
+
+The commands are executed inside the application container:
+```
+docker-compose exec app bash
+```
+
+Applying migrations:
+```
+python manage.py migrate
+```
+
+Create a superuser
+```
+python manage.py createsuperuser
+```
+
+Adding fixtures
+```
+./manage.py loaddata db.json
+```
 
 
 
