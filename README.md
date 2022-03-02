@@ -82,33 +82,33 @@ Make adjustments to the environment variables as needed.
 
 At the root of the repository, run the command:
 ```
-docker-compose up --build
+docker-compose up -d db
 ```
-
-To stop containers, run the command:
+Make migrations:
+```
+docker-compose run app python manage.py migrate
+```
+load data base:
+```
+docker-compose run app python manage.py loaddata db.json
+```
+Create super user:
+```
+docker-compose run app python manage.py createsuperuser
+```
+Raise container for application:
+```
+docker-compose up -d app
+```
+You can stop the database and application containers with the command:
 ```
 docker-compose stop
 ```
-
-The commands are executed inside the application container:
+You can stop and remove database and application containers with the command:
 ```
-docker-compose exec app bash
+docker-compose down
 ```
-
-Applying migrations:
-```
-python manage.py migrate
-```
-
-Create a superuser
-```
-python manage.py createsuperuser
-```
-
-Adding fixtures
-```
-./manage.py loaddata db.json
-```
+[recipebook](https://127.0.0.1:8000)
 
 
 

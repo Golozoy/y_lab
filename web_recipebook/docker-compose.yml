@@ -1,24 +1,19 @@
-version: '3.7'
-
+version: '3.8'
 services:
+
+#Application
   app:
     build: .
-    command: python /usr/src/app/recipebook/manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/usr/src/app
+    command: python3.9 manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
     env_file:
-      - ./.env.dev
+      - ./.env
     depends_on:
       - db
   db:
     image: postgres:14-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=user_django
-      - POSTGRES_PASSWORD=qwerty
-      - POSTGRES_DB=django_dev
-volumes:
-  postgres_data:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_DB=${SQL_DATABASE}
